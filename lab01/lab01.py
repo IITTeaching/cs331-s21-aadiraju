@@ -97,10 +97,10 @@ def gen_pattern(chars):
             word = '.'.join(word)
             word = word.center((4*(len(rev)-1)+1),'.')
             arr.append(word)
-            print(word + "\n")
+            print(word)
         length = len(arr) - 2
         while(length >= 0):
-            print(arr[length] + "\n")
+            print(arr[length])
             length -= 1
 
 def test4():
