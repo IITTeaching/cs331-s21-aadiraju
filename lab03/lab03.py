@@ -216,7 +216,7 @@ class SuffixArray():
         Creates a suffix array for document (a string).
         """
         self.document = document
-        self.sufarr = [x for x in range(len(document)-1)]
+        self.sufarr = [x for x in range(len(document))]
         self.sufarr = mysort(self.sufarr, lambda x,y: 0 if document[x:] == document[y:] else (-1 if document[x:] < document[y:] else 1))
 
     def positions(self, searchstr: str):
@@ -226,7 +226,7 @@ class SuffixArray():
         document = self.document
         strcmp = lambda x,y: 0 if document[x:][:min(len(y),len(document[x:]))] == y else (-1 if document[x:][:min(len(y),len(document[x:]))] < y else 1)
         metal = mybinsearch(self.sufarr, searchstr, strcmp)
-        return [metal ]
+        return [metal]
 
     def contains(self, searchstr: str):
         """
