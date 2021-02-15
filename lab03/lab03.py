@@ -209,26 +209,33 @@ def test2_2():
 #################################################################################
 # EXERCISE 3
 #################################################################################
-class Suffixlstay():
+class SuffixArray():
 
     def __init__(self, document: str):
         """
         Creates a suffix array for document (a string).
         """
-        pass
-
+        self.document = document
+        self.sufarr = [x for x in range(len(document)-1)]
+        self.sufarr = mysort(self.sufarr, lambda x,y: 0 if document[x:] == document[y:] else (-1 if document[x:] < document[y:] else 1))
 
     def positions(self, searchstr: str):
         """
         Returns all the positions of searchstr in the documented indexed by the suffix array.
         """
-        pass
+        document = self.document
+        strcmp = lambda x,y: 0 if document[x:][:min(len(y),len(document[x:]))] == y else (-1 if document[x:][:min(len(y),len(document[x:]))] < y else 1)
+        metal = mybinsearch(self.sufarr, searchstr, strcmp)
+        return [metal ]
 
     def contains(self, searchstr: str):
         """
         Returns true of searchstr is coontained in document.
         """
-        pass
+        document = self.document
+        strcmp = lambda x,y: 0 if document[x:][:min(len(y),len(document[x:]))] == y else (-1 if document[x:][:min(len(y),len(document[x:]))] < y else 1)
+        metal = mybinsearch(self.sufarr, searchstr, strcmp)
+        return metal >= 0
 
 # 40 Points
 def test3():
