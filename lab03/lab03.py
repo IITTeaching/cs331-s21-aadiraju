@@ -226,7 +226,7 @@ class SuffixArray():
         document = self.document
         strcmp = lambda x,y: 0 if document[x:][:min(len(y),len(document[x:]))] == y else (-1 if document[x:][:min(len(y),len(document[x:]))] < y else 1)
         metal = mybinsearch(self.sufarr, searchstr, strcmp)
-        return [metal]
+        return [metal - 1]
 
     def contains(self, searchstr: str):
         """
