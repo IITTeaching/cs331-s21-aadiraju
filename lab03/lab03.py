@@ -58,20 +58,22 @@ def mybinsearch(lst: List[T], elem: S, compare: Callable[[T, S], int]) -> int:
     """
     lef = 0
     rig = len(lst) - 1
-
+    index = -1
 
     while lef <= rig:
 
         middle = (lef + (rig)) // 2
+
         if( compare(lst[middle],elem) == 0):
-            return middle
+            index = middle
+            rig = middle -1
         elif(compare(lst[middle],elem) == -1):
             lef = middle + 1
         else:
             rig =  middle - 1
 
-    return -1 
-
+    return index
+        
 class Student():
     """Custom class to test generic sorting and searching."""
     def __init__(self, name: str, gpa: float):
@@ -226,7 +228,7 @@ class SuffixArray():
         document = self.document
         strcmp = lambda x,y: 0 if document[x:][:min(len(y),len(document[x:]))] == y else (-1 if document[x:][:min(len(y),len(document[x:]))] < y else 1)
         metal = mybinsearch(self.sufarr, searchstr, strcmp)
-        return [metal - 1]
+        return [metal]
 
     def contains(self, searchstr: str):
         """
