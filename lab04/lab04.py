@@ -117,11 +117,27 @@ class ArrayList:
         and enclosed by square brackets. E.g., for a list containing values
         1, 2 and 3, returns '[1, 2, 3]'."""
         ### BEGIN SOLUTION
+        final = '['
+        for i in range(self.len):   
+            final += str(self.data[i])
+            final += ', '
+        if(len(final) != 1):
+            final = final[:len(final)-2]
+        final += ']'
+        return final
         ### END SOLUTION
 
     def __repr__(self):
         """Supports REPL inspection. (Same behavior as `str`.)"""
         ### BEGIN SOLUTION
+        final = '['
+        for i in range(self.len):   
+            final += str(self.data[i])
+            final += ', '
+        if(len(final) != 1):
+            final = final[:len(final)-2]
+        final += ']'
+        return final
         ### END SOLUTION
 
 
@@ -130,6 +146,7 @@ class ArrayList:
     def append(self, value):
         """Appends value to the end of this list."""
         ### BEGIN SOLUTION
+        
         ### END SOLUTION
 
     def insert(self, idx, value):
@@ -158,11 +175,21 @@ class ArrayList:
         """Returns True if this ArrayList contains the same elements (in order) as
         other. If other is not an ArrayList, returns False."""
         ### BEGIN SOLUTION
+        if(self.len != other.len or not isinstance(other, ArrayList)):
+          return False
+        for i in range(self.len):
+          if(self.data[i] != other.data[i]):
+            return False
+        return True
         ### END SOLUTION
 
     def __contains__(self, value):
         """Implements `val in self`. Returns true if value is found in this list."""
         ### BEGIN SOLUTION
+        for i in range(self.len):
+          if(self.data[i] == value):
+            return True
+        return False
         ### END SOLUTION
 
 
@@ -171,16 +198,28 @@ class ArrayList:
     def __len__(self):
         """Implements `len(self)`"""
         ### BEGIN SOLUTION
+        return self.len
         ### END SOLUTION
 
     def min(self):
         """Returns the minimum value in this list."""
         ### BEGIN SOLUTION
+        minVal = self.data[0]
+        for i in range(self.len):
+          if self.data[i] < minVal:
+            minVal = self.data[i]
+        return minVal
         ### END SOLUTION
 
     def max(self):
         """Returns the maximum value in this list."""
         ### BEGIN SOLUTION
+        maxVal = self.data[0]
+        for i in range(self.len):
+          if self.data[i] > maxVal:
+            maxVal = self.data[i]
+        return maxVal
+
         ### END SOLUTION
 
     def index(self, value, i=0, j=None):
@@ -189,11 +228,23 @@ class ArrayList:
         specified, search through the end of the list for value. If value
         is not in the list, raise a ValueError."""
         ### BEGIN SOLUTION
+        if j == None:
+            j = self.len
+        j = self._normalize_idx(j)
+        for l in range(i,j):
+            if self.data[l] == value:
+                return l
+        raise ValueError
         ### END SOLUTION
 
     def count(self, value):
         """Returns the number of times value appears in this list."""
         ### BEGIN SOLUTION
+        count = 0
+        for x in range(self.len):
+          if(self.data[x] == value):
+            count += 1
+        return count
         ### END SOLUTION
 
 
@@ -214,11 +265,19 @@ class ArrayList:
         """Returns a new ArrayList instance (with a separate data store), that
         contains the same values as this list."""
         ### BEGIN SOLUTION
+        new = ArrayList()
+        for i in range(self.len):
+            new.append(self.data[i])
+        return new
         ### END SOLUTION
 
     def extend(self, other):
         """Adds all elements, in order, from other --- an Iterable --- to this list."""
         ### BEGIN SOLUTION
+        new = self.data
+        for i in other:
+            new.append(i)
+        self.data = new
         ### END SOLUTION
 
 
@@ -227,6 +286,8 @@ class ArrayList:
     def __iter__(self):
         """Supports iteration (via `iter(self)`)"""
         ### BEGIN SOLUTION
+        for i in range(self.len):
+            yield self.data[i]
         ### END SOLUTION
 
 ################################################################################
