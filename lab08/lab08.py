@@ -24,6 +24,8 @@ class Heap:
 
     def heapify(self, idx=0):
         ### BEGIN SOLUTION
+        #https://www.youtube.com/watch?v=t0Cq6tVNRBA
+        #https://www.youtube.com/watch?v=HqPJF2L5h9U
         ### END SOLUTION
 
     def add(self, x):
