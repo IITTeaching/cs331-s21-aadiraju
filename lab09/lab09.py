@@ -5,7 +5,6 @@ import random
 
 class HBStree:
     """This is an immutable binary search tree with history.
-
     Each insert and delete operation creates a new version of the tree. The data
     structure allows past versions to be accessed.
     """
@@ -53,6 +52,10 @@ class HBStree:
         KeyError, if key does not exist.
         """
         # BEGIN SOLUTION
+        if self.__contains__(key):
+          return key
+
+        raise KeyError() 
         # END SOLUTION
 
     def __contains__(self, el):
@@ -60,6 +63,16 @@ class HBStree:
         Return True if el exists in the current version of the tree.
         """
         # BEGIN SOLUTION
+        head = self.root_versions[-1]
+
+        while head:
+          if head.val == el:
+            return True
+          elif head.val < el:
+            head = head.right
+          else:
+            head = head.left
+        return False
         # END SOLUTION
 
     def insert(self,key):
@@ -69,11 +82,66 @@ class HBStree:
         from creating a new version.
         """
         # BEGIN SOLUTION
+        if self.__contains__(key):
+            return
+        else:
+            def inserter(inode):
+                if inode != None:
+                    if inode.val < key:
+
+                        return self.INode(inode.val, inode.left, inserter(inode.right))
+                    elif inode.val > key:
+
+                        return self.INode(inode.val, inserter(inode.left), inode.right)
+
+                else:
+
+                    return self.INode(key, None, None)
+
+            if self.root_versions[-1] != None:
+
+                inode = self.root_versions[-1]
+                
+                self.root_versions.append(inserter(inode))
+
+            else:
+                self.root_versions.append(self.INode(key, None, None))
+
         # END SOLUTION
 
     def delete(self,key):
         """Delete key from the tree, creating a new version of the tree. If key does not exist in the current version of the tree, then do nothing and refrain from creating a new version."""
         # BEGIN SOLUTION
+        if not self.__contains__(key):
+            return
+
+        def deletehelper(node, k=None):
+            if k == None:
+                if node.val == key:
+                    if node.left == None and node.right == None:
+                        return None
+                    elif node.left == None and node.right != None:
+                        return node.right
+                    elif node.left != None and node.right == None:
+                        return node.left
+                    else:
+                        head = node.left
+                        while head.right:
+                            head = head.right
+                        return self.INode(head.val, head.left, deletehelper(node.right, head))
+                elif node.val > key:
+                    return self.INode(node.val, deletehelper(node.left), node.right)
+                elif node.val < key:
+                    return self.INode(node.val, node.left, deletehelper(node.right))
+
+            else:
+                if node.val == k:
+                    return None
+                else:
+                    return self.INode(node.val, node.left, deletehelper(node.right, k))
+
+        head = self.root_versions[-1]
+        self.root_versions.append(deletehelper(head))
         # END SOLUTION
 
     @staticmethod
@@ -145,6 +213,24 @@ class HBStree:
         if timetravel < 0 or timetravel >= len(self.root_versions):
             raise IndexError(f"valid versions for time travel are 0 to {len(self.root_versions) -1}, but was {timetravel}")
         # BEGIN SOLUTION
+        treyshe = []
+        def iterbruh(node):
+            if node:
+
+                iterbruh(node.left)
+
+                treyshe.append(node.val)
+
+                iterbruh(node.right)
+
+        if self:
+            head = self.root_versions[len(self.root_versions) - 1 - timetravel]
+            iterbruh(head)
+            for valtrey in treyshe:
+                yield valtrey
+
+        else:
+          yield None
         # END SOLUTION
 
     @staticmethod
