@@ -15,6 +15,9 @@ class AVLTree:
 
         def rotate_left(self):
             ### BEGIN SOLUTION
+            n = self.right
+            self.val, n.val = n.val, self.val
+            self.right, n.right, self.left, n.left = n.right, n.left, n, self.left
             ### END SOLUTION
 
         @staticmethod
@@ -31,16 +34,72 @@ class AVLTree:
     @staticmethod
     def rebalance(t):
         ### BEGIN SOLUTION
+
+        nodono = AVLTree.Node.height(t.right) - AVLTree.Node.height(t.left)
+
+        if nodono < 0:
+            if AVLTree.Node.height(t.left.right) - AVLTree.Node.height(t.left.left) > 0:
+                t.left.rotate_left()
+            t.rotate_right()
+
+            AVLTree.rebalance(t.right)
+        elif nodono > 1:
+            if AVLTree.Node.height(t.right.right) - AVLTree.Node.height(t.right.left) < 0:
+                t.right.rotate_right()
+            t.rotate_left()
+
+            AVLTree.rebalance(t.left)
         ### END SOLUTION
 
     def add(self, val):
         assert(val not in self)
         ### BEGIN SOLUTION
+        def rec_add(nodo):
+            if not nodo:
+                return AVLTree.Node(val)
+            elif val < nodo.val:
+                nodo.left = rec_add(nodo.left)
+            else:
+                nodo.right = rec_add(nodo.right)
+
+            AVLTree.rebalance(nodo)
+            return nodo
+
+        if self.root:
+            self.root = rec_add(self.root)
+        else:
+            self.root = AVLTree.Node(val)
+
+        self.size += 1
         ### END SOLUTION
+
 
     def __delitem__(self, val):
         assert(val in self)
         ### BEGIN SOLUTION
+        def rec_del(treecko, val):
+            if not treecko:
+                return treecko
+            if treecko.val > val:
+                treecko.left = rec_del(treecko.left, val)
+            elif treecko.val < val:
+                treecko.right = rec_del(treecko.right, val)
+            else:
+                if not treecko.right:
+                    return treecko.left
+                elif not treecko.left:
+                    return treecko.right
+                    
+                treecko.val = AVLTree.lastone(treecko.left)
+                treecko.left = rec_del(treecko.left, AVLTree.lastone(treecko.left))
+
+
+            AVLTree.rebalance(treecko)
+
+            return treecko
+
+        self.root = rec_del(self.root, val)
+        self.size -= 1
         ### END SOLUTION
 
     def __contains__(self, val):
@@ -97,7 +156,11 @@ class AVLTree:
             else:
                 return max(1+height_rec(t.left), 1+height_rec(t.right))
         return height_rec(self.root)
+    def lastone(n: Node):
 
+        while n.right:
+            n = n.right
+        return n.val
 ################################################################################
 # TEST CASES
 ################################################################################
